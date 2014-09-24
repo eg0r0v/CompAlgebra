@@ -1,18 +1,8 @@
-#include "stdafx.h"
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <iomanip>
-#include <vector>
-#include "math.h"
+<p><input type="text" id="code" autocapitalize="off" spellcheck="false" value="2+2" onchange="" onkeydown="">
+    <button onclick="go()">Построить</button></p>
 
-using namespace std;
-
-double StrToDoub(string);	//конвертер из строки в вещественное число
-double Pow(double, double);	//возведение в степень,  более широкое, чем pow
-void stringCheck(string&);	//исправление ошибок строки из файла
-
-class My_Stack {
+	
+var My_Stack {
 public:
 	My_Stack();				// конструктор по умолчанию.
 	void clear();			//очистка массива
@@ -31,65 +21,16 @@ private:
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	setlocale(LC_ALL, "Russian");
 
-	string line, way, wayout;		//три вспомогательных строки
-	bool isGood = false;	//проверка потока
-	do
-	{
-		cout << "Введите путь и полное имя файла для ВВОДА: ";
-		cin >> way;
-		
-		for(unsigned i = 0; i < way.size() - 1; i++)
-		{
-			if (way[i] == '\\')			//заменяем слэши на двойные для корректного отображения.
-				if(way[i+1] != '\\' && way[i-1] != '\\') //Пользователю допускается вводить двойные слэши.
-					way.insert(i, "\\");
-		}
-		
-		//cout << way << '\n';
-		
-		isGood = true;
-		ifstream in (way.c_str()); //пробуем открыть поток
-		if (!in.good())
-		{
-			isGood = false;
-			cout << "Неверно введён адрес файла. Повторите ввод!\n";
-			in.close();
-		}
-	}while (!isGood);
-
-	//Файл для вывода.
-	do
-	{
-		cout << "Введите путь и полное имя файла для ВЫВОДА: ";
-		cin >> wayout;
-		for(unsigned i = 0; i < wayout.size() - 1; i++)
-		{
-			if (wayout[i] == '\\' &&
-				wayout[i+1] != '\\' &&	//заменяем слэши на двойные для корректного отображения.
-				wayout[i-1] != '\\') //Пользователю допускается вводить двойные слэши.
-					wayout.insert(i, "\\");
-		}
-		isGood = true;
-		ofstream of (wayout.c_str()); //пробуем открыть поток
-		if (!of.good())
-		{
-			isGood = false;
-			cout << "Неверно введён адрес файла. Повторите ввод!\n";
-			of.close();
-		}
-	}while (!isGood);
-
-	ifstream in (way.c_str()); //открыли с уверенностью
-	ofstream of (wayout.c_str());
+	var line;
+	var way;
+	var wayout;		//три вспомогательных строки
 
 	My_Stack stack; //временный стек для хранения знаков
 
-	bool isMoved = true;
-	int NumStr = 0;
-	do
-	{
+	var isMoved = true;
+	var NumStr = 0;
+	
 		getline(in,line); //считываем строку
 		NumStr++;
 		cout << "Строка " << NumStr << ": ";
@@ -323,10 +264,6 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			cout << "Пуста\n";
 		}
-	}while (!in.eof());	//до окончания файла
-	
-	in.close(); //закрываем поток
-	of.close();
 
 	//------------------------------Часть В-------
 
@@ -335,27 +272,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	vector<string> Polska;	//вектор строк с ОПН - в него мы разделим считанную строку
 	way.clear();		//очищаем вспомогательные строки
 	line.clear();
-	
-	do
-	{
-		cout << "Введите путь и полное имя файла для ВВОДА: ";
-		cin >> way;
-		for(unsigned i = 1; i < way.size() - 1; i++)
-		{
-			if (way[i] == '\\')			//заменяем слэши на двойные для корректного отображения.
-				if(way[i+1] != '\\' && way[i-1] != '\\') //Пользователю допускается вводить двойные слэши.
-					way.insert(i, "\\");
-		}
-		//cout << way << '\n';
-		isGood = true;
-		ifstream in (way.c_str()); //пробуем открыть поток
-		if (!in.good())
-		{
-			isGood = false;
-			cout << "Неверно введён адрес файла. Повторите ввод!\n";
-			in.close();
-		}
-	}while (!isGood);
 
 	ifstream Bin(way.c_str()); //открываем файл
 	
@@ -424,148 +340,17 @@ int _tmain(int argc, _TCHAR* argv[])
 	return 0;	
 }
 
-My_Stack::My_Stack()
-{
-	//cout << "Вызов ctor-a\n"; //сакральная фраза. Must have.
-}
 
-char My_Stack::Pop()
-{		
-	char c = home.back();	//берём последний элемент вектора
-	home.pop_back();		//удаляем его из вектора
-	return c;				//и возвращаем Пользователю
-}
-
-double My_Stack::PopD() //вытаскиваем вещ.число
-{
-	double res = dome.back();	//скопировали
-	dome.pop_back();			//удаляем из вектора
-	return res;					//возвращаем результат
-}
-
-void My_Stack::Push(char c)
-{
-	this->home.push_back(c);//добавляем оператор в стек
-}
-
-void My_Stack::Push(double d)
-{
-	this->dome.push_back(d);//добавляем число в стек
-}
-
-bool My_Stack::Is_Empty() const
-{
-	if (this->home.size() == 0) return true;//если стек пуст
-	return false;							//иначе
-}
-
-bool My_Stack::Is_DEmpty() const
-{
-	if (this->dome.size() == 0) return true;//если стек пуст
-	return false;							//иначе
-}
-
-void My_Stack::clear()
-{
-	this->home.clear();	//очищаем стек
-	this->dome.clear();
-}
-
-char My_Stack::ShowLast() const
-{
-	return this->home.back(); //показываем последний элемент, не удаляя его
-}
-
-void My_Stack::PrintD() const //вывод стека
-{
-	cout.precision(5);
-	if(this->Is_DEmpty()) {cout << setw(20) << "пуст\n";} //если стек пуст
-	else
-	{
-		cout << setw(20) << this->dome[0];			//вывод с отступом первого элемента
-		for (unsigned i = 1; i < this->dome.size(); i++)	//цикл - вывод остальных
-			cout << setw(7) << this->dome[i];
-		cout << '\n';
-	}
-}
-
-double StrToDoub(string line)		//из строки - в вещ.число
-{
-	bool isSignMinus = false;		//отрицательное ли?
-	if(line[0] == '-') {isSignMinus = true; line = line.substr(1, line.size());}
-
-	double result = 0;
-	int dot = -1; //ищем точку
-
-	for (unsigned i = 0; i < line.size(); i++)
-		if (line[i] == '.') {dot = i; i = line.size();}	//если точка есть, то dot >0
-	
-	double por = 1;//степень десятки
-
-	if (dot < 0) //если точки нет
-		for (int i = line.size() - 1; i > -1; i--)
-		{
-			result += (line[i] - '0')*por; //пускаем цикл с конца, формируем результат
-			por *=10;
-		}
-	else		//есть точка - разделяем целую и дробную часть
-	{
-		por = 1; 
-		for (int i = dot - 1; i > -1; i--) //целая часть
-		{
-			result += (line[i] - '0')*por;
-			por *=10;
-		}
-
-		por = 1;
-		for (int i = dot+1; i < line.size(); i++) //дробная часть
-		{
-			por *=0.1;
-			result += (line[i] - '0')*por;
-		}
-	}
-	if (isSignMinus) //если число отрицательное
-		result = 0 - result;	//делаем его отрицательным
-	return result;
-}
-
-double Pow(double x, double y) //более широкая операция Pow
-{
-	if( x > 0) return pow(x,y); //если основание > 0 - как обычно
-	if (x == 0) return 0.;		//если основание == 0, возвращаем 0
-	if (x < 0)					//если меньше 0
-	{
-		int inty = (int)(y);	
-		if (inty %2 == 0 && y - inty == 0) return pow(x*(-1),y); //если экспонента - чётная - убираем минус
-		else return (-1)*pow(x*(-1),y);				//иначе выносим минус за знак степени
-	} 
-	cout << "Не удалась операция Pow. Выход из программы.\n"; //не выполнимая ветвь
-	return 0;
-}
-
-void stringCheck(string &line) //проверка начальной строки на возможные недоразумения
+function stringCheck(str) //проверка начальной строки на возможные недоразумения
 {	
-	for (unsigned i = 0; i < line.size(); i++)
+	var line = str.callee;
+	var i = 0;
+	while ( i < line.size())
 	{
 		if (line[i] == '{' || line[i] == '[' || line[i] == '<') line[i] = '('; //заменяем скобки
 		if (line[i] == '}' || line[i] == ']' || line[i] == '>') line[i] = ')';
 
 		if (line[i] == ',') line[i] = '.';
-
-		if (line[i] == '#')					//проверяем на символ #, которого быть по умолчанию не должно;
-		{									//он используется для записи отрицательных элементов выражения
-			cout << "Ошибка в формуле! Лишний знак #\n";
-			cout << "Исправить? Y/N: ";
-			string rest;
-			cin >> rest;
-			if (rest[0] == 'Y' || rest[0] == 'y')
-			{for (unsigned j = 0; j < line.size(); j++)
-					if(line[j] == '#')
-						line.replace(j,1,1,' ');
-			}
-			else 
-			{ cout << "Выход из программы.\n"; exit(1);}
-		}
 
 		if ((line[i] < '0' || line[i] > '9') && //проверка на все оставшиеся допустимые символы
 			line[i] != '.' && line[i] != '+' &&
@@ -574,14 +359,14 @@ void stringCheck(string &line) //проверка начальной строки на возможные недоразу
 			line[i] != '-' && line[i] != '(' &&
 			line[i] != ' ')
 		{
-			cout << "В числе - посторонний символ! " << line[i] << " Проверьте файл\n";
-			exit(1);
+			alert ("В числе - посторонний символ! " + line[i] + " Проверьте файл\n" );
 		}
 	}
-
+	i = 0
 	for(unsigned i = 0; i < line.size() - 1; i++)
 	{
 		if (line[i] == ' ' && line[i+1] == ' ')			//убираем дублирующие пробелы
 			{line.erase(i,1); i = 0;}
 	}
 }
+

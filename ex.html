@@ -1,0 +1,210 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Collapsible Tree Example</title>
+
+    <style>
+
+	.node rect {
+	  fill: #fff;
+	  stroke: #BDBDBD;
+	  stroke-width: 1px;
+	}
+
+	.node text { 
+      font: 13px sans-serif;
+      font-weight: 700;
+   }
+
+	.link {
+	  fill: none;
+	  stroke: #BDBDBD;
+	  stroke-width: 2px;
+	}
+	
+    </style>
+
+  </head>
+
+  <body>
+
+<!-- load the d3.js library -->	
+<script src="http://d3js.org/d3.v3.min.js"></script>
+	
+<script>
+
+var data = [
+    { "name" : "Level 2: A", "parent":"Top Level" },
+    { "name" : "Top Level", "parent":"null" },
+    { "name" : "Son of A", "parent":"Level 2: A" },
+    { "name" : "Daughter of A", "parent":"Level 2: A" },
+    { "name" : "Level 2: B", "parent":"Top Level" }
+    ];
+
+// *********** Convert flat data into a nice tree ***************
+// create a name: node map
+var dataMap = data.reduce(function(map, node) {
+	map[node.name] = node;
+	return map;
+}, {});
+
+// create the tree array
+var treeData = [];
+data.forEach(function(node) {
+	// add to parent
+	var parent = dataMap[node.parent];
+	if (parent) {
+		// create child array if it doesn't exist
+		(parent.children || (parent.children = []))
+			// add node to child array
+			.push(node);
+	} else {
+		// parent is null or missing
+		treeData.push(node);
+	}
+});
+
+// Create the stream structure  
+var margin = {top: 20, right: 120, bottom: 20, left: 120},
+	width = 960 - margin.right - margin.left,
+	height = 500 - margin.top - margin.bottom;
+	
+var i = 0;
+
+var stream = d3.layout.tree()
+	.size([height, width]);
+
+var diagonal = d3.svg.diagonal()
+	.projection(function(d) { return [d.y, d.x+25]; });
+
+var svg = d3.select("body").append("svg")
+	.attr("width", width)
+	.attr("height", height)
+  .append("g");
+
+createStream(treeData[0]);
+
+function createStream(source) {
+
+  var nodes = stream.nodes(root);
+  var links = stream.links(nodes);
+
+  // Normalize for fixed-depth.
+  nodes.forEach(function(d) { d.y = d.depth * 180; });
+
+  // Declare the nodes…
+  var node = svg.selectAll("g.node")
+	  .data(nodes, function(node) { 
+    console.log(node);
+  return node.id || (node.id = ++i); });
+
+  // Enter the nodes.
+  var nodeEnter = node.enter().append("g")
+	  .attr("class", "node")
+	  .attr("transform", function(d) { 
+		  return "translate(" + d.y + "," + d.x + ")"; });
+
+  nodeEnter.append("rect")
+	  .attr("height", 50)
+    .attr("width", 130)
+	  .style("fill", "#fff");
+
+  nodeEnter.append("text")
+	  .attr("text-anchor", "top")
+    .attr("transform", function(d) {
+      return "translate(" + 25 + "," + 30 + ")"; })
+	  .text(function(d) { return d.name; });
+
+  // Declare the links…
+  svg.selectAll("path.link")
+	  .data(links, function(d) { return d.target.id; }).enter()
+    .insert("path", "g")
+	  .attr("class", "link")
+	  .attr("d", diagonal);
+}
+
+</script>
+	
+  </body>
+</html>
+
+
+
+if (position < line.length) {		
+					if (line[position] == '(') {
+						position++;
+						Stack.push('('); 
+						var S = ParseS();
+						if (line[position] != ')')
+							return false;
+						return S;
+					}
+					else return ParseA(line);
+				}
+				else return false;
+			}
+
+			function ParseA() {				
+				var E =	ParseE(line);
+				var B = true;
+				while (B)
+					B = ParseB(line);
+				return E;
+			}
+
+			function ParseB() {
+				var operation = false;
+				var priority = 0;
+				
+				if (line[position] == '+' || line[0] == '-') {
+					operation = true;
+					priority = 1;
+				}
+				if (line[position] == '*' || line[0] == '/') {
+					operation = true;
+					priority = 2;
+				}
+				if (line[position] == '^') {
+					operation = true;
+					priority = 3;
+				}
+				
+				if (!operation) return false;
+				else {
+					if (Stack.length != 0 || Stack[Stack.length-1]
+				
+				
+				}
+					return ParseS(line);
+				var E =	ParseE(line);
+				var B = true;
+				while (B)
+					B = ParseB(line);
+				return E;
+			}
+			
+			function ParseE(str, Stack, Polska) {
+				var line = str.callee;
+				var stack = Stack.callee;
+				var polska = Polska.callee;
+				
+				var key = "";
+				
+				while (line[0] >= 'a' && line[0] <= 'z' ||
+					   line[0] >= 'A' && line[0] <= 'Z' ||
+					   line[0] >= '0' && line[0] <= '9') {
+					   key = key+line[0];
+					   line = line.substring(1);				
+				}
+				if (key != "") {
+					polska.push(key);
+					return true;
+				}
+				return false;
+			}
+			
+		
+	if (correctstring) ParseS(line);
+	
+	
